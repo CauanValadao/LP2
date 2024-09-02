@@ -30,6 +30,5 @@ int main(){
 
     printf("\n\nO numero e %d", chute);
 
-
     return 0;
 }
