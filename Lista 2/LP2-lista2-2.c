@@ -35,4 +35,42 @@ void geraImgGreyFull_R(unsigned char img[linha][coluna], unsigned char pixel, in
     img[i-1][j-1] = pixel;          //atribui o valor do pixel na posição i-1 e j-1
     if(j == 0) geraImgGreyFull_R(img, pixel, i-1, coluna);  //quando apenas j for 0, a linha i ja tera sido preenchida, e passamos para a proxima linha i-1, e voltamos para a primeira coluna->coluna
     else geraImgGreyFull_R(img, pixel, i, j-1); //quando j for diferente de 0, preenchemos a mesma linha i, e passamos para a coluna j-1
+#define linha 100
+#define coluna 100
+
+int N = linha * coluna;
+
+void geraImgGreyFull_R(unsigned char img[linha][coluna], unsigned char pixel);
+
+int main(){
+    unsigned char img[linha][coluna] = {0}, pixel;
+    int i, j, soma = 0;
+    
+    printf("Digite o valor do pixel: ");
+    scanf("%hhu", &pixel);
+
+    geraImgGreyFull_R(img, pixel);
+
+
+    for(i = 0; i < linha; i++){
+        for(j = 0; j < coluna; j++){
+            if(img[i][j] == pixel) soma++;
+        }
+    }
+
+    if(soma != linha*coluna) printf("erro");
+    else printf("deu certo");
+
+    
+    return 0;
+}
+
+void geraImgGreyFull_R(unsigned char img[linha][coluna], unsigned char pixel){
+    if(N == 0){
+        N = linha * coluna;
+        return;
+    }
+    N--;
+    img[0][0] = pixel;
+    geraImgGreyFull_R(&img[0][1], pixel);
 }
