@@ -1,16 +1,17 @@
-void geraImgGreyB_R(unsigned char img[linha][coluna],int i ,int j);
-
 #include <stdio.h>
-#define linha 480
-#define coluna 640
+#define linha 10
+#define coluna 10
 
+void geraImgGreyB_R(unsigned char img[linha][coluna]);
+
+int N = linha * coluna;     
 
 int main(){
     unsigned char img[linha][coluna];
     int cont = 0;
 
 
-    geraImgGreyB_R(img, linha, coluna);
+    geraImgGreyB_R(img);
     
 
     for(int i = 0; i < linha; i++){                                         // Verifica se a imagem foi gerada corretamente
@@ -29,9 +30,12 @@ int main(){
     return 0;
 }
 
-void geraImgGreyB_R(unsigned char img[linha][coluna],int i ,int j){
-    if(i == 0 && j == 0) return;    //quando i e j forem iguais a 0, a imagem estará completa, e a função encerra
-    img[i-1][j-1] = 0;          //atribui o valor do pixel na posição i-1 e j-1
-    if(j == 0) geraImgGreyB_R(img, i-1, coluna);  //quando apenas j for 0, a linha i ja tera sido preenchida, e passamos para a proxima linha i-1, e voltamos para a primeira coluna->coluna
-    else geraImgGreyB_R(img, i, j-1); //quando j for diferente de 0, preenchemos a mesma linha i, e passamos para a coluna j-1
+void geraImgGreyB_R(unsigned char img[linha][coluna]){
+      if(N == 0){           //testa se N chegou a 0
+        N = linha * coluna;     //reseta N para que a função possa ser chamada novamente
+        return;             //encerra a função
+    }
+    N--;                    //decrementa N para controlar a quantidade de vezes que a função foi chamada
+    img[0][0] = 0;          //atribui o valor 0 ao pixel atual
+    geraImgGreyB_R(&img[0][1]);     //chama a função novamente, passando o endereço do próximo pixel
 }
