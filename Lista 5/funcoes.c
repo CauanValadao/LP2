@@ -56,6 +56,9 @@ imgRGB alocaImagemRGB(int nLin, int nCol){
         return *imagem;
     }
 
+    imagem->nLin = nLin;
+    imagem->nCol = nCol;
+
     for(int i = 0; i < nLin; i++){
         imagem->img[i] = &imagem->_img[i*nCol];
     }
