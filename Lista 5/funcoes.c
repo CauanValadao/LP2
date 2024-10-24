@@ -1,28 +1,3 @@
-typedef unsigned char uchar;
-
-typedef struct{
-    uchar R, G, B;
-}tRGB;
-
-typedef struct{
-    uchar *_img;
-    uchar **img;
-    int nLin, nCol;
-}imgGray;
-
-typedef struct{
-    tRGB *_img;
-    tRGB **img;
-    int nLin, nCol;
-}imgRGB;
-
-struct imagens{
-    imgGray img;
-    struct imagens *prox;
-};
-
-typedef struct imagens tImagens;
-
 imgGray alocaImagemGray(int nLin, int nCol){
     imgGray *imagem = (imgGray*)malloc(sizeof(imgGray));
     if(imagem == NULL){
@@ -244,3 +219,22 @@ tRGB pixelRGBMin(imgRGB img){
     return menor;
 }
 
+int* somaPorLinhasGray(imgGray img){
+    int *vet = (int*)calloc(sizeof(int),img.nLin);
+
+    for(int i = 0; i < img.nLin; i++){
+        for(int j = 0; j < img.nCol; j++)
+            vet[i] += img.img[i][j];
+    }
+    return vet;
+}
+
+int* somaPorColunasGray(imgGray img){
+    int *vet = (int*)calloc(sizeof(int), img.nCol);
+
+    for(int j = 0; j < img.nCol; j++){
+        for(int i = 0; i < img.nLin; i++)
+            vet[j] += img.img[i][j];
+    }
+    return vet;
+}
