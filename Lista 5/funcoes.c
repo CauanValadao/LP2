@@ -241,3 +241,24 @@ int* somaPorColunasGray(imgGray img){
     }
     return vet;
 }
+
+imgGray imagemcinza(imgRGB img){
+    imgGray imgcinza;
+
+    if(img.img == NULL || img._img == NULL){
+        imgcinza.img = NULL;
+        imgcinza._img = NULL;
+        return imgcinza;
+    }
+
+    imgcinza = alocaImagemGray(img.nLin, img.nCol);
+
+    if(imgcinza.img == NULL || imgcinza._img == NULL)
+        return imgcinza;
+    
+    for(int i = 0; i < img.nLin * img.nCol; i++)
+        imgcinza._img[i] = ((uchar)(0.3 * img._img[i].R + 0.59 * img._img[i].G + 0.11 * img._img[i].B));
+
+    return imgcinza;
+
+}

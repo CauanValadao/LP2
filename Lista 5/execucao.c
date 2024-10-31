@@ -3,7 +3,7 @@
 int main(){
     imgGray imagemC;
     imgRGB imagemCrgb;
-    int i, teste = 0;
+    int i, j, teste = 0;
 
     //funcao 1
     imagemC = alocaImagemGray(10,10);
@@ -62,6 +62,10 @@ int main(){
         printf("\nExecucao da funcao 8 falhou");
     else
         printf("\nExecucao da funcao 8 teve exito");
+
+    
+
+
     
     //funcao 9
     geraImgGray(imagemC, 1);
@@ -115,14 +119,66 @@ int main(){
         printf("\nExecucao da funcao 13 falhou\n");
     else
         printf("\nExecucao da funcao 13 teve exito\n");
-      
+
+    
+
+    //funcao extra 
+
+    imgRGB imge = alocaImagemRGB(9,9);
+
+    tRGB pixel = {60,250,60};
+
+    for(i = 0; i < 3; i++){
+        for(j = 0; j < 9; j++){
+            imge.img[i][j] = pixel;
+        }
+    }
+    pixel.R = 10;
+    pixel.G = 10;
+    pixel.B = 250;
+
+    for(i = 3; i < 6; i++){
+        for(j = 0; j < 9; j++){
+            imge.img[i][j] = pixel;
+        }
+    }
+    pixel.R = 250;
+    pixel.G = 10;
+    pixel.B = 10;
+
+    for(i = 6; i < 9; i++){
+        for(j = 0; j < 9; j++){
+            imge.img[i][j] = pixel;
+        }
+    }
+
+    imgGray imgg = alocaImagemGray(9,9);
+
+    imgg = imagemcinza(imge);
+
+    for(i = 0; i < imge.nLin; i++){
+        printf("\n");
+        for(j = 0; j < imge.nCol; j++){
+            printf("%d ", imge.img[i][j].B);
+        }
+    }
+
+    printf("\n\n\n");
+
+    for(i = 0; i < imge.nLin; i++){
+        printf("\n");
+        for(j = 0; j < imge.nCol; j++){
+            printf("%hhu ", imgg.img[i][j]);
+        }
+    }
+
+    
    
     free(imagemC._img);
     free(imagemC.img);
     free(imagemCrgb._img);
     free(imagemCrgb.img);
     free(vet);
-    free(&imagemC);
-    free(&imagemCrgb);
+  
     return 0;
 }
