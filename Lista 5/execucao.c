@@ -168,7 +168,7 @@ int main(){
     for(i = 0; i < imge.nLin; i++){
         printf("\n");
         for(j = 0; j < imge.nCol; j++){
-            printf("%hhu ", imgg.img[i][j]);
+            printf("%c ", imgg.img[i][j]);
         }
     }
 

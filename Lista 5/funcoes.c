@@ -1,69 +1,52 @@
 imgGray alocaImagemGray(int nLin, int nCol){
-    imgGray *imagem = (imgGray*)malloc(sizeof(imgGray));
-    if(imagem == NULL){
-        imgGray imag;
-        imag.img = NULL;
-        imag._img = NULL;
-        imag.nLin = nLin;
-        imag.nCol = nCol;
-        return imag;
-    }
+    imgGray imagem;
     
-    imagem->nLin = nLin;
-    imagem->nCol = nCol;
+    imagem.nLin = nLin;
+    imagem.nCol = nCol;
     
-    imagem->_img = (uchar*)malloc(sizeof(uchar)*nLin*nCol);
-    if(imagem->_img == NULL){
-        imagem->img = NULL;
-        return *imagem;
+    imagem._img = (uchar*)malloc(sizeof(uchar)*nLin*nCol);
+    if(imagem._img == NULL){
+        imagem.img = NULL;
+        return imagem;
     }
 
-    imagem->img = (uchar**)malloc(sizeof(uchar*)*nLin);
-    if(imagem->img == NULL){
-        free(imagem->_img);
-        imagem->_img = NULL;
-        return *imagem;
+    imagem.img = (uchar**)malloc(sizeof(uchar*)*nLin);
+    if(imagem.img == NULL){
+        free(imagem._img);
+        imagem._img = NULL;
+        return imagem;
     }
 
     for(int i = 0; i < nLin; i++){
-        imagem->img[i] = &imagem->_img[i*nCol];
+        imagem.img[i] = &imagem._img[i*nCol];
     }
 
-    return *imagem;
+    return imagem;
 }
 
 imgRGB alocaImagemRGB(int nLin, int nCol){
-    imgRGB *imagem = (imgRGB*)malloc(sizeof(imgRGB));
-    if(imagem == NULL){
-        imgRGB imag;
-        imag._img = NULL;
-        imag.img = NULL;
-        imag.nLin = nLin;
-        imag.nCol = nCol;
-        return imag;
+    imgRGB imagem;
+    imagem.nLin = nLin;
+    imagem.nCol = nCol;
+
+    imagem._img = (tRGB*)malloc(sizeof(tRGB)*nLin*nCol);
+    if(imagem._img == NULL){
+        imagem.img = NULL;
+        return imagem;
     }
 
-    imagem->_img = (tRGB*)malloc(sizeof(tRGB)*nLin*nCol);
-    if(imagem->_img == NULL){
-        imagem->img = NULL;
-        return *imagem;
+    imagem.img = (tRGB**)malloc(sizeof(tRGB*)*nLin);
+    if(imagem.img == NULL){
+        free(imagem._img);
+        imagem._img = NULL;
+        return imagem;
     }
-
-    imagem->img = (tRGB**)malloc(sizeof(tRGB*)*nLin);
-    if(imagem->img == NULL){
-        free(imagem->_img);
-        imagem->_img = NULL;
-        return *imagem;
-    }
-
-    imagem->nLin = nLin;
-    imagem->nCol = nCol;
 
     for(int i = 0; i < nLin; i++){
-        imagem->img[i] = &imagem->_img[i*nCol];
+        imagem.img[i] = &imagem._img[i*nCol];
     }
 
-    return *imagem;
+    return imagem;
 }
 
 int geraImgGrayFull(imgGray img, uchar pixel){
