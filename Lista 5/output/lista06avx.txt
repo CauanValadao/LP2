@@ -2,4 +2,4 @@ gray
 10
 10
 arquivo de teste mas agora esse e 
-lista06teste
+lista06avx.img
