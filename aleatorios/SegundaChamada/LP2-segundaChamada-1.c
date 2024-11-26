@@ -35,10 +35,12 @@ int main(){
     }
 
     if(teste)
-        printf("Codigo deu errado");
+        printf("\nCodigo deu errado\n");
     else
-        printf("Codigo Substituiu os valores com sucesso");
+        printf("\nCodigo Substituiu os valores com sucesso\n");
 
+    printf("\nString original: %s\n", strcopia);
+    printf("String modificada: %s\n", str);
     
     
     return 0;

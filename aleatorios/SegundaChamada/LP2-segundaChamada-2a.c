@@ -1,4 +1,4 @@
-
+#include <stdio.h>
 
 int inverte(float vet[ ], int n){
     int zero = 0;
@@ -32,9 +32,11 @@ int main(){
     }
 
     if(teste)
-        printf("Codigo deu errado");
+        printf("\nCodigo deu errado\n");
     else
-        printf("Codigo Substituiu os valores com sucesso");
+        printf("\nCodigo Substituiu os valores com sucesso\n");
+
+    
 
     return 0;
 }

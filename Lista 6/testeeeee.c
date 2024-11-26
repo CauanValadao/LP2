@@ -1,0 +1,1 @@
+int saveImgGray(int img, char[] desc, char[] fileName);
