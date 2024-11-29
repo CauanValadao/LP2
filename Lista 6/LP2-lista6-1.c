@@ -1,16 +1,38 @@
-
-#include "cabecalhos.h"
+#include "cabecalhos6.h"
 #include <string.h>
-
 
 
 int saveImgGray(imgGray img, char* desc, char* fileName){
   int i;
 
+  if(img.img == NULL || img._img == NULL){
+    return 0;
+  }
+
   char* nome = (char*)malloc(sizeof(char)*strlen(fileName) + 5);
+
+  if(nome == NULL){
+    printf("Erro ao alocar memoria\n");
+    return 1;
+  }
+
   strcpy(nome, fileName);
   strcat(nome, ".img");
   nome[strlen(fileName) + 4] = '\0';
+
+  char* nome2 = (char*)malloc(sizeof(char)*strlen(fileName) + 5);
+
+  if(nome2 == NULL){
+    printf("Erro ao alocar memoria\n");
+    free(nome);
+    return 1;
+  }
+
+  strcpy(nome2, fileName);
+  strcat(nome2, ".txt");
+  nome2[strlen(fileName) + 4] = '\0';
+
+ /*--------------------------------------------------------------*/  
 
   FILE *imagem = fopen(nome, "wb");
 
@@ -22,16 +44,13 @@ int saveImgGray(imgGray img, char* desc, char* fileName){
     printf("Arquivo 1 aberto com sucesso\n");
   }
 
+
   fwrite(img._img, sizeof(uchar), img.nCol*img.nLin, imagem);
 
   fclose(imagem);
 
   /*--------------------------------------------------------------*/
   
-  char* nome2 = (char*)malloc(sizeof(char)*strlen(fileName) + 5);
-  strcpy(nome2, fileName);
-  strcat(nome2, ".txt");
-  nome2[strlen(fileName) + 4] = '\0';
 
   FILE *hed = fopen(nome2, "w");
 
@@ -52,6 +71,8 @@ int saveImgGray(imgGray img, char* desc, char* fileName){
   }
   fprintf(hed, "%d\n%d\n%s\n%s", img.nLin, img.nCol, desc, nome);
 
+  /*--------------------------------------------------------------*/
+
   fclose(hed);
   free(nome);
   free(nome2);
@@ -63,7 +84,7 @@ int main(void){
   imagem.nLin = 10;
   imagem.nCol = 10;
 
-  char desc[80] = "arquivo de teste mas agora esse e ";
+  char desc[80] = "escrevendo so para mos";
   char fileName[20] = "lista06avx";
 
   imagem = alocaImagemGray(imagem.nLin, imagem.nCol);
@@ -79,7 +100,11 @@ int main(void){
 
   FILE *arq = fopen("lista06avx.img", "rb");
 
-  fread(img, sizeof(img),1, arq);
+  //fread(img, sizeof(img),1, arq);
+
+  for(int i = 0; i < imagem.nLin*imagem.nCol; i++){
+    fread(&img[i], sizeof(uchar), 1, arq);
+  }
 
   for(int i = 0; i < imagem.nLin; i++){
     printf("\n");	
