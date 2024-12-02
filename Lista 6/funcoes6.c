@@ -153,27 +153,21 @@ int saveImgRGB(imgRGB img, char* desc, char* fileName){
 
 int loadHead(char* fileName, char* desc){
     char *nome = (char*)malloc(strlen(fileName) + 5);
-    if(nome == NULL){
-        printf("Erro ao alocar memoria");
+    if(nome == NULL)
         return 0;
-    }
-
+    
     strcpy(nome, fileName);
     strcat(nome, ".txt");
 
     FILE *hed = fopen(nome, "r");
     free(nome);
 
-    
-    if(hed == NULL){
-        printf("Erro ao abrir o arquivo\n");
+    if(hed == NULL)
         return 0;
-    }
 
     char tipo[6];
     if(fgets(tipo, 6, hed) == NULL){
         fclose(hed);
-        printf("Erro ao ler o arquivo");
         return 0;
     }
     
@@ -183,7 +177,6 @@ int loadHead(char* fileName, char* desc){
 
     if(fgets(desc, 80, hed) == NULL){
         fclose(hed);
-        printf("Erro ao ler o arquivo");
         return 0;
     }
     desc[strcspn(desc, "\n")] = '\0';
@@ -198,8 +191,6 @@ int loadHead(char* fileName, char* desc){
 
     else 
         return 0;
-
-
 }
 
 imgGray loadImgGray(char* fileName){
