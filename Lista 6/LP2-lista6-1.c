@@ -18,7 +18,6 @@ int saveImgGray(imgGray img, char* desc, char* fileName){
 
   strcpy(nome, fileName);
   strcat(nome, ".img");
-  nome[strlen(fileName) + 4] = '\0';
 
   char* nome2 = (char*)malloc(sizeof(char)*strlen(fileName) + 5);
 
@@ -30,8 +29,6 @@ int saveImgGray(imgGray img, char* desc, char* fileName){
 
   strcpy(nome2, fileName);
   strcat(nome2, ".txt");
-  nome2[strlen(fileName) + 4] = '\0';
-
  /*--------------------------------------------------------------*/  
 
   FILE *imagem = fopen(nome, "wb");

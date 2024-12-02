@@ -1,0 +1,5 @@
+gray
+10
+10
+fdfsdafasd
+imagemteste.img

@@ -16,7 +16,6 @@ int saveImgRGB(imgRGB img, char[] fileName){
     }
     strcpy(nome, fileName);
     strcat(nome, ".img");
-    nome[strlen(fileName) + 4] = '\0';
 
     char* nome2 = (char*)malloc(sizeof(char)*strlen(fileName) + 5);
 
@@ -27,8 +26,7 @@ int saveImgRGB(imgRGB img, char[] fileName){
     }
     strcpy(nome2, fileName);
     strcat(nome2, ".txt");
-    nome2[strlen(fileName) + 4] = '\0';
-
+    
     /*--------------------------------------------------------------*/
 
     FILE *imagem = fopen(nome, "wb");
@@ -61,7 +59,7 @@ int saveImgRGB(imgRGB img, char[] fileName){
         printf("Arquivo hed aberto com sucesso\n");
     }
     
-    int i = fputs("gray\n", hed);
+    int i = fputs("RGB\n", hed);
 
     if(i == EOF){
     printf("Erro ao escrever no arquivo\n");

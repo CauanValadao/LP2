@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef unsigned char uchar;
 
@@ -25,6 +26,26 @@ struct imagens{
 };
 
 typedef struct imagens tImagens;
+
+int saveImgGray(imgGray img, char* desc, char* fileName);
+
+int saveImgRGB(imgRGB img, char* desc, char* fileName);
+
+int loadHead(char* fileName, char* desc);
+
+imgGray loadImgGray(char* fileName);
+
+imgRGB loadImgRGB(char* fileName);
+
+int saveImgGrayBin(imgGray img, char* fileName);
+
+int saveImgRGBBin(imgRGB img, char* fileName);
+
+imgGray loadImgGrayBin(char* fileName);
+
+imgRGB loadImgRGBBin(char* fileName);
+
+/*-------------------------------------------------------*/
 
 imgGray alocaImagemGray(int nLin, int nCol);
 

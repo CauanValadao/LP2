@@ -1,3 +1,498 @@
+/*
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef unsigned char uchar;
+
+typedef struct{
+    uchar R, G, B;
+}tRGB;
+
+typedef struct{
+    uchar *_img;
+    uchar **img;
+    int nLin, nCol;
+}imgGray;
+
+typedef struct{
+    tRGB *_img;
+    tRGB **img;
+    int nLin, nCol;
+}imgRGB;
+
+struct imagens{
+    imgGray img;
+    struct imagens *prox;
+};
+
+typedef struct imagens tImagens;
+*/
+
+
+int saveImgGray(imgGray img, char* desc, char* fileName){
+  int i;
+
+  if(img.img == NULL || img._img == NULL){
+    return 0;
+  }
+
+  char* nome = (char*)malloc(sizeof(char)*strlen(fileName) + 5);
+
+  if(nome == NULL)
+    return 0;
+  
+
+  strcpy(nome, fileName);
+  strcat(nome, ".img");
+
+  char* nome2 = (char*)malloc(sizeof(char)*strlen(fileName) + 5);
+
+  if(nome2 == NULL){
+    free(nome);
+    return 0;
+  }
+
+  strcpy(nome2, fileName);
+  strcat(nome2, ".txt");
+ /*--------------------------------------------------------------*/  
+
+  FILE *imagem = fopen(nome, "wb");
+
+  if(imagem == NULL)
+    return 0;
+
+  fwrite(img._img, sizeof(uchar), img.nCol*img.nLin, imagem);
+
+  fclose(imagem);
+
+  /*--------------------------------------------------------------*/
+  
+
+  FILE *hed = fopen(nome2, "w");
+
+  if(hed == NULL)
+    return 0;
+ 
+  i = fputs("gray\n", hed);
+
+  if(i == EOF){
+    fclose(hed);
+    return 0;
+  }
+  fprintf(hed, "%d\n%d\n%s\n%s", img.nLin, img.nCol, desc, nome);
+
+  /*--------------------------------------------------------------*/
+
+  fclose(hed);
+  free(nome);
+  free(nome2);
+  return 1;  
+}
+
+int saveImgRGB(imgRGB img, char* desc, char* fileName){
+    if(img.img == NULL || img._img == NULL){
+        return 0;
+    }
+
+    char* nome = (char*)malloc(sizeof(char)*strlen(fileName) + 5);
+    
+    if(nome ==  NULL)
+        return 0;
+    
+    strcpy(nome, fileName);
+    strcat(nome, ".img");
+
+    char* nome2 = (char*)malloc(sizeof(char)*strlen(fileName) + 5);
+
+    if(nome2 == NULL){
+        free(nome);
+        return 0;
+    }
+    strcpy(nome2, fileName);
+    strcat(nome2, ".txt");
+    
+    /*--------------------------------------------------------------*/
+
+    FILE *imagem = fopen(nome, "wb");
+    
+    if(imagem == NULL){
+        return 0;
+        free(nome);
+        free(nome2);
+    }
+
+    fwrite(img._img, sizeof(tRGB), img.nCol*img.nLin, imagem);
+
+    fclose(imagem);
+    
+    /*--------------------------------------------------------------*/
+
+    FILE *hed = fopen(nome2, "w");
+
+    if(hed == NULL){
+        return 0;
+        free(nome);
+        free(nome2);
+    }
+    int i = fputs("RGB\n", hed);
+
+    if(i == EOF){
+    fclose(hed);
+    return 0;
+    }
+
+    fprintf(hed, "%d\n%d\n%s\n%s\n", img.nLin, img.nCol, desc, nome);
+
+    fclose(hed);
+    free(nome);
+    free(nome2);
+
+    return 1;
+}
+
+int loadHead(char* fileName, char* desc){
+    char *nome = (char*)malloc(strlen(fileName) + 5);
+    if(nome == NULL){
+        printf("Erro ao alocar memoria");
+        return 0;
+    }
+
+    strcpy(nome, fileName);
+    strcat(nome, ".txt");
+
+    FILE *hed = fopen(nome, "r");
+    free(nome);
+
+    
+    if(hed == NULL){
+        printf("Erro ao abrir o arquivo\n");
+        return 0;
+    }
+
+    char tipo[6];
+    if(fgets(tipo, 6, hed) == NULL){
+        fclose(hed);
+        printf("Erro ao ler o arquivo");
+        return 0;
+    }
+    
+    char buffer[256];
+    fgets(buffer, sizeof(buffer), hed);
+    fgets(buffer, sizeof(buffer), hed);
+
+    if(fgets(desc, 80, hed) == NULL){
+        fclose(hed);
+        printf("Erro ao ler o arquivo");
+        return 0;
+    }
+    desc[strcspn(desc, "\n")] = '\0';
+
+    fclose(hed);
+
+    if(!strcmp(tipo, "gray\n"))
+        return 1;
+
+    else if(!strcmp(tipo, "RGB\n"))
+        return 2;
+
+    else 
+        return 0;
+
+
+}
+
+imgGray loadImgGray(char* fileName){
+/*------------------abrindo arquivo hed--------------------------------*/
+    imgGray img;
+    img.img = NULL;
+    img._img = NULL;
+    
+    char *nome = (char*)malloc(strlen(fileName) + 5);
+    if(nome == NULL)
+        return img;
+    
+    strcpy(nome, fileName);
+    strcat(nome, ".txt");
+
+    FILE *hed = fopen(nome, "r");
+    free(nome);
+    if(hed == NULL)
+        return img;
+    
+    char buffer[256];
+    fgets(buffer, sizeof(buffer), hed);
+
+/*------------------lendo linha e coluna--------------------------------*/
+    /*
+    if (fgets(buffer, sizeof(buffer), hed) == NULL) {
+        fclose(hed);
+        return img;
+    }
+    img.nLin = atoi(buffer);
+
+    if (fgets(buffer, sizeof(buffer), hed) == NULL) {
+        fclose(hed);
+        return img;
+    }
+    img.nCol = atoi(buffer);
+    */
+    int i = 0;
+    char x, numero[10];
+    x = fgetc(hed);
+    do{
+        numero[i] = x;
+        i++;
+        x = fgetc(hed);
+    }while(x != '\n');
+    numero[i] = '\0';
+
+    img.nLin = atoi(numero);
+
+    i = 0;
+    x = fgetc(hed);
+    do{
+        numero[i] = x;
+        i++;
+        x = fgetc(hed);
+    }while(x != '\n');
+    numero[i] = '\0';
+
+    img.nCol = atoi(numero);
+
+    fclose(hed);
+/*-------------------------copiando imagem-----------------------------------------*/
+    char *nome2 = (char*)malloc(strlen(fileName) + 5);
+    if(nome2 == NULL)
+        return img;
+    
+    strcpy(nome2, fileName);
+    strcat(nome2, ".img");
+
+    FILE *imagem = fopen(nome2, "rb");
+    free(nome2);
+    if(imagem == NULL)
+        return img;
+    
+    img = alocaImagemGray(img.nLin, img.nCol);
+
+    if(img.img == NULL || img._img == NULL){
+        fclose(imagem);
+        return img;
+    }
+
+    fread(img._img, sizeof(uchar), img.nLin*img.nCol, imagem);
+
+    fclose(imagem);
+    return img;
+}
+
+imgRGB loadImgRGB(char* fileName){
+    imgRGB img;
+    img._img = NULL;
+    img.img = NULL;
+
+    char *nome = (char*)malloc(strlen(fileName) + 5);
+    if(nome == NULL)
+        return img;
+    
+    strcpy(nome, fileName);
+    strcat(nome, ".txt");
+
+    FILE *hed = fopen(nome, "r");
+    free(nome);
+    if(hed == NULL)
+        return img;
+    
+    char buffer[256];
+    fgets(buffer, sizeof(buffer), hed);
+
+/*------------------lendo linha e coluna--------------------------------*/
+    if (fgets(buffer, sizeof(buffer), hed) == NULL) {
+        fclose(hed);
+        return img;
+    }
+    img.nLin = atoi(buffer);
+
+    if (fgets(buffer, sizeof(buffer), hed) == NULL) {
+        fclose(hed);
+        return img;
+    }
+    img.nCol = atoi(buffer);
+
+    fclose(hed);
+/*-------------------------copiando imagem-----------------------------------------*/
+    char *nome2 = (char*)malloc(strlen(fileName) + 5);
+    if(nome2 == NULL)
+        return img;
+    
+    strcpy(nome2, fileName);
+    strcat(nome2, ".img");
+
+    FILE *imagem = fopen(nome2, "rb");
+    free(nome2);
+    if(imagem == NULL)
+        return img;
+
+    img = alocaImagemRGB(img.nLin, img.nCol);
+    
+    if(img.img == NULL || img._img == NULL){
+        fclose(imagem);
+        return img;
+    }
+
+    fread(img._img, sizeof(tRGB), img.nLin*img.nCol, imagem);
+
+    fclose(imagem);
+    return img;
+}
+
+int saveImgGrayBin(imgGray img, char* fileName){
+    if(img.img == NULL || img._img == NULL)
+        return 0;
+
+    char *nome = (char*)malloc(strlen(fileName) + 5);
+    if(nome == NULL)
+        return 0;
+    strcpy(nome, fileName);
+    strcat(nome, ".bin");
+
+    FILE *imagem = fopen(nome, "wb");
+    free(nome);
+    if(imagem == NULL)
+        return 0;
+
+    fwrite("bin\n", sizeof(char), strlen("bin\n"), imagem);
+    fwrite(&img.nLin, sizeof(img.nLin), 1, imagem);
+    fwrite(&img.nCol, sizeof(img.nCol), 1, imagem);
+    fwrite(img._img, sizeof(uchar), img.nCol*img.nLin, imagem);
+
+    fclose(imagem);
+    return 1;
+}
+
+int saveImgRGBBin(imgRGB img, char* fileName){
+    if(img.img == NULL || img._img == NULL)
+        return 0;
+
+    char *nome = (char*)malloc(strlen(fileName) + 5);
+    if(nome == NULL)
+        return 0;
+    strcpy(nome, fileName);
+    strcat(nome, ".bin");
+
+    FILE *imagem = fopen(nome, "wb");
+    free(nome);
+    if(imagem == NULL)
+        return 0;
+
+    if(fwrite("bin\n", sizeof(char), strlen("bin\n"), imagem) != strlen("bin\n")){
+        fclose(imagem);
+        return 0;
+    }
+    if(fwrite(&img.nLin, sizeof(int), 1, imagem) != 1){
+        fclose(imagem);
+        return 0;
+    }
+    if(fwrite(&img.nCol, sizeof(int), 1, imagem) != 1){
+        fclose(imagem);
+        return 0;
+    }
+    if(fwrite(img._img, sizeof(tRGB), img.nLin*img.nCol, imagem) != (size_t)(img.nLin*img.nCol)){
+        fclose(imagem);
+        return 0;
+    }
+       
+    fclose(imagem);
+    return 1;
+}
+
+imgGray loadImgGrayBin(char* fileName){
+    imgGray img;
+    img.img = NULL;
+    img._img = NULL;
+
+    char *nome = (char*)malloc(strlen(fileName) + 5);
+    if(nome == NULL)
+        return img;
+    strcpy(nome, fileName);
+    strcat(nome, ".bin");
+
+    FILE *imagem = fopen(nome, "rb");
+    free(nome);
+    if(imagem == NULL)
+        return img;
+    
+    if(fseek(imagem, strlen("bin\n"), SEEK_SET)){
+        fclose(imagem);
+        return img;
+    }
+
+    if(fread(&img.nLin, sizeof(int), 1, imagem) != 1){
+        fclose(imagem);
+        return img;
+    }
+    if(fread(&img.nCol, sizeof(int), 1, imagem) != 1){
+        fclose(imagem);
+        return img;
+    }
+   
+    img = alocaImagemGray(img.nLin, img.nCol);
+
+    if(fread(img._img, sizeof(uchar), img.nLin*img.nCol, imagem) != (size_t)(img.nLin*img.nCol)){
+        free(img._img);
+        free(img.img);
+        img._img = NULL;
+        img.img = NULL;
+    }
+
+    fclose(imagem);
+    return img;
+}
+
+imgRGB loadImgRGBBin(char* fileName){
+    imgRGB img;
+    img._img = NULL;
+    img.img = NULL;
+
+    char *nome = (char*)malloc(strlen(fileName) + 5);
+    if(nome == NULL)
+        return img;
+    strcpy(nome, fileName);
+    strcat(nome, ".bin");
+
+    FILE *imagem = fopen(nome, "rb");
+    free(nome);
+    if(imagem == NULL)
+        return img;
+    
+    if(fseek(imagem, strlen("bin\n"), SEEK_SET)){
+        fclose(imagem);
+        return img;
+    }
+
+    if(fread(&img.nLin, sizeof(int), 1, imagem) != 1){
+        fclose(imagem);
+        return img;
+    }
+    if(fread(&img.nCol, sizeof(int), 1, imagem) != 1){
+        fclose(imagem);
+        return img;
+    }
+    img = alocaImagemRGB(img.nLin, img.nCol); 
+
+    if(fread(img._img, sizeof(tRGB), img.nLin*img.nCol, imagem) != (size_t)(img.nLin*img.nCol)){
+        free(img._img);
+        free(img.img);
+        img._img = NULL;
+        img.img = NULL;
+    }
+
+    fclose(imagem);
+    return img;
+}
+/*-------------------------------------------------------------------------------------*/
+
 imgGray alocaImagemGray(int nLin, int nCol){
     imgGray imagem;
     

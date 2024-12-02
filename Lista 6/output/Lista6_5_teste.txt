@@ -1,0 +1,5 @@
+RGB
+10
+10
+essa e a desc
+Lista6_5_teste.img
