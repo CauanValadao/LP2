@@ -2,7 +2,8 @@
     "files.associations": {
         "lp2-lista1-5": "c",
         "stdio.h": "c",
-        "funcoes.c": "cpp"
+        "funcoes.c": "cpp",
+        "stdlib.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

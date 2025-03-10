@@ -482,6 +482,7 @@ imgRGB loadImgRGBBin(char* fileName){
     fclose(imagem);
     return img;
 }
+
 /*-------------------------------------------------------------------------------------*/
 
 imgGray alocaImagemGray(int nLin, int nCol){
