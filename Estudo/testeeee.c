@@ -7,11 +7,22 @@ typedef struct{
     double valor;
 }frac;
 
+typedef struct{
+    int linha;
+    int coluna;
+    int** mat;
+    int* dados;
+}matriz;
+
 int soma1(int x, int y);
 
 frac soma(frac a, frac b);
 
 int maxdiv(int a , int b);
+
+matriz alocamatriz(int l, int c);
+
+void preenchematriz(matriz mat);
 
 int main(){
 
@@ -77,4 +88,67 @@ frac soma(frac a, frac b){
     resultado.valor = (double)resultado.num/resultado.den;
 
     return resultado;
+}
+
+
+matriz alocamatriz(int l, int c){
+    matriz erro;
+    erro.linha = 0;
+    erro.coluna = 0;
+    erro.mat = NULL;
+    erro.dados = NULL;
+
+    if(l < 1 || c < 1) return erro;
+
+    matriz mat;
+
+    mat.linha = l;
+    mat.coluna = c;
+    
+    mat.dados = (int*)malloc(sizeof(int)*l*c);
+
+    if(mat.dados == NULL) return erro;
+
+    mat.mat = (int**)malloc(sizeof(int*)*l);
+
+    if(mat.mat == NULL){
+        free(mat.dados);
+        return erro;
+    }
+
+    for(int i = 0; i < l; i++)
+        mat.mat[i] = &mat.dados[i*c];
+    
+    return mat;
+}
+
+void preenchematriz(matriz mat){
+    for(int i = 0; i < mat.linha*mat.coluna; i++){
+        printf("Digite o elemento [%d][%d] da matriz: \n", i/mat.coluna, i%mat.coluna);
+        scanf("%d",mat.mat[i]);
+    }
+}
+
+void imprimematriz(matriz mat){
+    for(int i = 0; i < mat.linha; i++){
+        printf("\n");
+        for(int j = 0; j < mat.coluna; j++)
+            printf("%d ", mat.mat[i][j]);
+    }
+}
+
+int somaelementos(matriz mat){
+    int some;
+    for(int i = 0; i < mat.linha; i++){
+        for(int j = 0; j < mat.coluna; j++)
+         some += mat.mat[i][j];
+    }
+    return some;
+}
+
+void liberamemmat(matriz mat){
+    if(mat.dados != NULL)
+        free(mat.dados);
+    if(mat.mat != NULL)
+        free(mat.mat);
 }
